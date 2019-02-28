@@ -1,0 +1,20 @@
+package unio
+
+import (
+	"github.com/go-bongo/bongo"
+	"github.com/labstack/gommon/log"
+)
+
+func (c Configs) Connection() *bongo.Connection {
+	connection, err := bongo.Connect(config()); if err != nil {
+		log.Fatal(err)
+	}
+	return connection
+}
+
+func config() *bongo.Config {
+	return &bongo.Config{
+		ConnectionString: configs.Env("DATABASE_CONNECTION"),
+		Database:         configs.Env("DATABASE_NAME"),
+	}
+}

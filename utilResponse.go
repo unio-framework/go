@@ -1,4 +1,4 @@
-package utils
+package unio
 
 import (
 	"github.com/labstack/echo"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func RequestResult(c echo.Context, status int, data interface{}, errors interface{}) error {
+func (u Utils) RequestResult(c echo.Context, status int, data interface{}, errors interface{}) error {
 	result := echo.Map{
 		"status": status,
 	}
@@ -25,7 +25,7 @@ func RequestResult(c echo.Context, status int, data interface{}, errors interfac
 	return c.JSON(status, result)
 }
 
-func TraceError(err error) {
+func (u Utils) TraceError(err error) {
 	if err != nil {
 		log.Error(err)
 	}
