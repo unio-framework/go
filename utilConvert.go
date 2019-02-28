@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func (u Utils) InterfaceToStruct(m interface{}, val interface{}) error {
+func (u Util) InterfaceToStruct(m interface{}, val interface{}) error {
 	tmp, err := json.Marshal(m); if err != nil {
 		u.TraceError(err)
 		return err

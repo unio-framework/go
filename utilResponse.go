@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (u Utils) RequestResult(c echo.Context, status int, data interface{}, errors interface{}) error {
+func (u Util) RequestResult(c echo.Context, status int, data interface{}, errors interface{}) error {
 	result := echo.Map{
 		"status": status,
 	}
@@ -25,7 +25,7 @@ func (u Utils) RequestResult(c echo.Context, status int, data interface{}, error
 	return c.JSON(status, result)
 }
 
-func (u Utils) TraceError(err error) {
+func (u Util) TraceError(err error) {
 	if err != nil {
 		log.Error(err)
 	}

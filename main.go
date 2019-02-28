@@ -1,14 +1,14 @@
 package unio
 
 type(
-    Configs     struct {}
-    Middlewares struct {}
-    Utils       struct {}
+    Config     struct {}
+    Middleware struct {}
+    Util       struct {}
 )
 
 //noinspection GoUnusedGlobalVariable
-var configs = Configs{}
+var Configs = Config{}
 //noinspection GoUnusedGlobalVariable
-var middlewares = Middlewares{}
+var Middlewares = Middleware{}
 //noinspection GoUnusedGlobalVariable
-var utils = Utils{}
+var Utils = Util{}

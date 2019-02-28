@@ -9,7 +9,7 @@ import (
 /**
 Load enviroment variables
 */
-func (c Configs) LoadEnv() {
+func (c Config) LoadEnv() {
 	err := godotenv.Load(); if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -18,6 +18,6 @@ func (c Configs) LoadEnv() {
 /**
 Shortcut to get an environment
 */
-func (c Configs) Env(key string) string {
+func (c Config) Env(key string) string {
 	return os.Getenv(key)
 }

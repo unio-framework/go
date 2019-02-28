@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-func (c Configs) Connection() *bongo.Connection {
+func (c Config) Connection() *bongo.Connection {
 	connection, err := bongo.Connect(config()); if err != nil {
 		log.Fatal(err)
 	}
