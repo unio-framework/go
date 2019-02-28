@@ -3,6 +3,6 @@ package unio
 /**
 Start all configuratio
 */
-func (c Config) Init() {
+func (c *Config) Init() {
     c.LoadEnv()
 }

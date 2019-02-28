@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-func (m Middleware) JsonBodyAsArray(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *Middleware) JsonBodyAsArray(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 		if c.Request().Header.Get(echo.HeaderContentType) != echo.MIMEApplicationJSON {
 			// Conversion will be done only for JSON request

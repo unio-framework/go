@@ -14,7 +14,7 @@ type JsonFormatRule func(key string, value interface{}) interface{}
 Middleware
 Run all JSON body fields, and format the need
 */
-func (m Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareFunc {
+func (m *Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			if c.Request().Header.Get(echo.HeaderContentType) != echo.MIMEApplicationJSON {
