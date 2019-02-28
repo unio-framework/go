@@ -3,6 +3,4 @@ vendor
 .env
 Gopkg.lock
 data/*
-go.mod
-go.sum
 !.gitkeep
