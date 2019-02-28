@@ -23,7 +23,7 @@ func (m Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareFu
 				return next(c)
 			}
 
-			buffer := utils.GetBuffer(c)
+			buffer := Utils.GetBuffer(c)
 			var raw interface{}
 			err = c.Bind(&raw)
 
@@ -39,13 +39,13 @@ func (m Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareFu
 					body = append(body, formatted)
 				}
 				fmt.Println(body)
-				buffer = utils.InterfaceToBuffer(body)
+				buffer = Utils.InterfaceToBuffer(body)
 			default:
 				body := format(raw, formatter)
-				buffer = utils.InterfaceToBuffer(body)
+				buffer = Utils.InterfaceToBuffer(body)
 			}
 
-			utils.ResetBuffer(c, buffer)
+			Utils.ResetBuffer(c, buffer)
 			return next(c)
 		}
 	}

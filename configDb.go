@@ -14,7 +14,7 @@ func (c Config) Connection() *bongo.Connection {
 
 func config() *bongo.Config {
 	return &bongo.Config{
-		ConnectionString: configs.Env("DATABASE_CONNECTION"),
-		Database:         configs.Env("DATABASE_NAME"),
+		ConnectionString: Configs.Env("DATABASE_CONNECTION"),
+		Database:         Configs.Env("DATABASE_NAME"),
 	}
 }

@@ -13,7 +13,7 @@ func (m Middleware) JsonBodyAsArray(next echo.HandlerFunc) echo.HandlerFunc {
 			return next(c)
 		}
 
-		buffer := utils.GetBuffer(c)
+		buffer := Utils.GetBuffer(c)
 		var raw interface{}
 		err = c.Bind(&raw)
 
@@ -24,7 +24,7 @@ func (m Middleware) JsonBodyAsArray(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		utils.ResetBuffer(c, buffer)
+		Utils.ResetBuffer(c, buffer)
 		return next(c)
 	}
 }
