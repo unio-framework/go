@@ -38,7 +38,6 @@ func (m Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareFu
 					formatted := format(part.Interface(), formatter)
 					body = append(body, formatted)
 				}
-				fmt.Println(body)
 				buffer = Utils.InterfaceToBuffer(body)
 			default:
 				body := format(raw, formatter)
