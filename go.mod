@@ -1,4 +1,4 @@
-module github.com/unio-framework/unio-go/v1
+module github.com/unio-framework/go/v1
 
 require (
 	github.com/go-bongo/bongo v0.10.4
