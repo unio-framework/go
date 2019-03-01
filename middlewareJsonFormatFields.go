@@ -6,15 +6,10 @@ import (
 )
 
 /**
-Rule structure
-*/
-type JsonFormatRule func(key string, value interface{}) interface{}
-
-/**
 Middleware
 Run all JSON body fields, and format the need
 */
-func (m *Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareFunc {
+func (m *Middleware) JsonFormatFields(formatter RequestFormatRule) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			if c.Request().Header.Get(echo.HeaderContentType) != echo.MIMEApplicationJSON {
@@ -28,7 +23,7 @@ func (m *Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareF
 
 			switch reflect.ValueOf(raw).Kind() {
             //noinspection ALL
-            case reflect.Slice:
+            case reflect.Slice, reflect.Array:
 				s := reflect.ValueOf(raw)
 
 				body := []interface{}{}
@@ -39,7 +34,7 @@ func (m *Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareF
 				}
 				buffer = Utils.InterfaceToBuffer(body)
 			default:
-				body := format(raw, formatter)
+				body := format(c, raw, formatter)
 				buffer = Utils.InterfaceToBuffer(body)
 			}
 
@@ -52,7 +47,7 @@ func (m *Middleware) JsonFormatFields(formatter JsonFormatRule) echo.MiddlewareF
 /**
 Formatter workaround
 */
-func format(raw interface{}, formatter JsonFormatRule) interface{} {
+func format(c echo.Context, raw interface{}, formatter RequestFormatRule) interface{} {
 	reflectRaw := reflect.ValueOf(raw)
 
 	body := map[string]interface{}{}
@@ -62,19 +57,18 @@ func format(raw interface{}, formatter JsonFormatRule) interface{} {
 		value := reflectRaw.MapIndex(k).Interface()
 
 		switch reflect.ValueOf(value).Kind() {
-		case reflect.Slice:
-		case reflect.Array:
+		case reflect.Slice, reflect.Array:
 			s := reflect.ValueOf(value)
 			for i := 0; i < s.Len(); i++ {
 				part := s.Index(i)
-				body[key] = format(part.Interface(), formatter)
+				body[key] = format(c, part.Interface(), formatter)
 			}
 
 		case reflect.Map:
-			body[key] = format(value, formatter)
+			body[key] = format(c, value, formatter)
 
 		default:
-			body[key] = formatter(key, value)
+			body[key] = formatter(c.Request().Method, key, value)
 		}
 	}
 	return body

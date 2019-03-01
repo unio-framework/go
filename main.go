@@ -12,3 +12,8 @@ var Configs = Config{}
 var Middlewares = Middleware{}
 //noinspection GoUnusedGlobalVariable
 var Utils = Util{}
+
+/**
+Rule structure
+*/
+type RequestFormatRule func(method string, key string, value interface{}) interface{}

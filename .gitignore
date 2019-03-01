@@ -1,6 +1,6 @@
 .idea
 vendor
-.env
-Gopkg.lock
+_doc
 data/*
+.env
 !.gitkeep
