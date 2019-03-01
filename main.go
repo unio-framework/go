@@ -3,6 +3,7 @@ package unio
 type(
     Config     struct {}
     Middleware struct {}
+    Search     struct {}
     Util       struct {}
 )
 
@@ -12,6 +13,8 @@ var Configs = Config{}
 var Middlewares = Middleware{}
 //noinspection GoUnusedGlobalVariable
 var Utils = Util{}
+//noinspection GoUnusedGlobalVariable
+var Searchs = Search{}
 
 /**
 Rule structure
