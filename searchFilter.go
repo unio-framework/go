@@ -21,7 +21,7 @@ func (s *Search) FormatFilters(f interface{}, rule RequestFormatRule) (filters J
     return
 }
 
-func (s *Search) formatFilter(content interface{}) interface{} {
+func formatFilter(content interface{}) interface{} {
     if Utils.IsJSON(content) {
         rContent := reflect.ValueOf(content)
         if rContent.Kind() == reflect.Map {

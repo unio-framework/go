@@ -16,7 +16,7 @@ func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
 
         switch key {
         case "filter":
-            formattedQuery[key] = FormatFilters(reflectQuery.MapIndex(k).Interface(), rule)
+            formattedQuery[key] = s.FormatFilters(reflectQuery.MapIndex(k).Interface(), rule)
         //case "result":
         //    formattedQuery[key] = reflectQuery.MapIndex(k).Interface()
         }
