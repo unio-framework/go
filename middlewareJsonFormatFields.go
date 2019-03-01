@@ -29,7 +29,7 @@ func (m *Middleware) JsonFormatFields(formatter RequestFormatRule) echo.Middlewa
 				body := []interface{}{}
 				for i := 0; i < s.Len(); i++ {
 					part := s.Index(i)
-					formatted := format(part.Interface(), formatter)
+					formatted := format(c, part.Interface(), formatter)
 					body = append(body, formatted)
 				}
 				buffer = Utils.InterfaceToBuffer(body)
