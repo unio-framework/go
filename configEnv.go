@@ -2,8 +2,8 @@ package unio
 
 import (
 	"github.com/joho/godotenv"
-	"log"
-	"os"
+    "github.com/labstack/gommon/log"
+    "os"
 )
 
 /**
@@ -12,7 +12,7 @@ Load enviroment variables
 func (c *Config) LoadEnv() {
     envTyped := ".env."+c.Environment()
 	err := godotenv.Load(".env", envTyped); if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Error("Error loading some .env file")
 	}
 }
 
@@ -24,7 +24,7 @@ func (c *Config) Env(key string) string {
 }
 
 /**
-For project environment
+For project environment, need to set GOENV with environment type
  */
 func (c *Config) Environment() string {
     env := os.Getenv("GOENV")
