@@ -10,10 +10,15 @@ import (
 Load enviroment variables
 */
 func (c *Config) LoadEnv() {
-    envTyped := ".env."+c.Environment()
-	err := godotenv.Load(".env", envTyped); if err != nil {
-		log.Error("Error loading some .env file")
-	}
+    baseFiles := []string{
+        ".env",
+        ".env."+c.Environment(),
+    }
+    for _,file := range baseFiles {
+        err := godotenv.Overload(file); if err != nil {
+            log.Error("Error loading "+file+" file")
+        }
+    }
 }
 
 /**
