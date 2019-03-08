@@ -40,7 +40,10 @@ func formatErrors(errs interface{}) interface{} {
 
     if Utils.In(reflect.ValueOf(errs).Kind(), reflect.Array, reflect.Slice) == false {
         errors = []interface{}{errs}
+    } else {
+        errors = errs.([]interface{})
     }
+
     for key,value := range errors {
         if reflect.ValueOf(value).Kind() == reflect.String {
             errors[key] = value
