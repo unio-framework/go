@@ -1,14 +1,13 @@
 package unio
 
 import (
-	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
-	"net/http"
+    "github.com/labstack/gommon/log"
+    "net/http"
     "reflect"
 )
 
-func (u *Util) RequestResult(c echo.Context, status int, data interface{}, errors interface{}) error {
-    result := echo.Map{
+func (u *Util) RequestResult(status int, data interface{}, errors interface{}) (int, JSONObject) {
+    result := JSONObject{
         "status": status,
     }
     errors = formatErrors(errors)
@@ -24,7 +23,7 @@ func (u *Util) RequestResult(c echo.Context, status int, data interface{}, error
         result["error"] = u.AnyOf(data, errors)
     }
 
-    return c.JSON(status, result)
+    return status, result
 }
 
 func (u *Util) TraceError(err error) {
