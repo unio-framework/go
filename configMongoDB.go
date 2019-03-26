@@ -5,10 +5,16 @@ import (
     "github.com/zebresel-com/mongodm"
 )
 
-func (c *Config) MongoConnection() *mongodm.Connection {
+/**
+Include additional information, like register tables
+ */
+type MongoConfig func(connection *mongodm.Connection)
+
+func (c *Config) MongoConnection(afterConfig MongoConfig) *mongodm.Connection {
 	connection, err := mongodm.Connect(config()); if err != nil {
 		log.Fatal(err)
 	}
+	if afterConfig != nil { afterConfig(connection) }
 	return connection
 }
 
