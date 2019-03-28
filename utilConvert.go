@@ -24,7 +24,7 @@ func (u *Util) StringToFloat(value interface{}) (number float32, err error) {
     number = -999
     if s,ok := value.(string); ok {
         price, err := strconv.ParseFloat(s, 32)
-        if err == nil { value = float32(price) }
+        if err == nil { number = float32(price) }
     } else {
         err = errors.New("variable is not string")
     }
