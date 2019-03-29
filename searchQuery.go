@@ -69,7 +69,7 @@ func (s *Search) RunQuery(search JSONObject, collection *bongo.Collection) []int
             filterResult(search, &model)
             records = append(records, model)
         }
-        defer collection.Connection.Session.Close()
+        //defer collection.Connection.Session.Close() // TODO See if will cause problems
     }
     return records
 }
