@@ -60,7 +60,7 @@ func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
 }
 
 // Run MongoDB search and result filtering
-func Run(search JSONObject, collection *bongo.Collection) []interface{} {
+func (s *Search) Run(search JSONObject, collection *bongo.Collection) []interface{} {
     var records []interface{}
     if search["search"] != nil {
         var model map[string]interface{}
