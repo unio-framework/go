@@ -2,7 +2,6 @@ package unio
 
 type(
     Config     struct {}
-    Handler    struct {}
     Middleware struct {}
     Search     struct {}
     Util       struct {}
@@ -10,8 +9,6 @@ type(
 
 //noinspection GoUnusedGlobalVariable
 var Configs = Config{}
-//noinspection GoUnusedGlobalVariable
-var Handlers = Handler{}
 //noinspection GoUnusedGlobalVariable
 var Middlewares = Middleware{}
 //noinspection GoUnusedGlobalVariable
