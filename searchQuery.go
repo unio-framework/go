@@ -50,9 +50,9 @@ func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
         key := k.String()
 
         switch key {
-        case "filter":
+        case "search":
             formattedQuery[key] = s.FormatFilters(reflectQuery.MapIndex(k).Interface(), rule)
-        case "result":
+        case "filter", "result":
             formattedQuery[key] = reflectQuery.MapIndex(k).Interface()
         }
     }
@@ -62,11 +62,11 @@ func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
 // Run MongoDB search and result filtering
 func Run(search JSONObject, collection *bongo.Collection) []interface{} {
     var records []interface{}
-    if search["filter"] != nil {
+    if search["search"] != nil {
         var model map[string]interface{}
-        results := collection.Find(search["filter"])
+        results := collection.Find(search["search"])
         for results.Next(&model) {
-            filterResult(search["result"].([]string), &model)
+            filterResult(search, &model)
             records = append(records, model)
         }
         defer collection.Connection.Session.Close()
@@ -75,8 +75,24 @@ func Run(search JSONObject, collection *bongo.Collection) []interface{} {
 }
 
 // Filter result fields
-func filterResult(filter []string, model *map[string]interface{}) {
-    for _,key := range filter {
-        delete(*model, key)
+func filterResult(search JSONObject, model *map[string]interface{}) {
+    // Filter fields that not returns to result
+    if search["filter"] != nil {
+        f, ok := search["filter"].([]string); if ok {
+            for _,key := range f {
+                delete(*model, key)
+            }
+        }
+    }
+
+    // Get all results
+    if search["result"] != nil {
+        f, ok := search["result"].([]string); if ok {
+            for key := range *model {
+                if Utils.ArrayContains(f, key) == false {
+                    delete(*model, key)
+                }
+            }
+        }
     }
 }
