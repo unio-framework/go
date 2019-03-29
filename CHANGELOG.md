@@ -12,3 +12,4 @@
 ### Added
 - Constant for simple Date
 - Data conversion util
+- Run MongoDB searchs and filters using $_GET search params

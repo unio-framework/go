@@ -5,37 +5,18 @@
 package unio
 
 import (
-	"github.com/labstack/echo"
+    "github.com/go-bongo/bongo"
+    "github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"net/url"
 	"reflect"
 )
 
-// Format query filter parameters with MongoDB pattern
-func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
-	reflectQuery := reflect.ValueOf(query)
-
-	formattedQuery := JSONObject{}
-	for _, k := range reflectQuery.MapKeys() {
-		key := k.String()
-
-		switch key {
-		case "filter":
-			formattedQuery[key] = s.FormatFilters(reflectQuery.MapIndex(k).Interface(), rule)
-			//case "result":
-			//    formattedQuery[key] = reflectQuery.MapIndex(k).Interface()
-		}
-	}
-	return formattedQuery
-}
-
 // Format $_GET string query to JSON structure
 func (s *Search) GetQuery(c echo.Context) JSON {
 	rawQuery := c.QueryString()
 	query, err := url.PathUnescape(rawQuery)
-	if err != nil {
-		log.Error(err)
-	}
+	if err != nil { log.Error(err) }
 
 	if Utils.IsJSON(query) {
 		jsonQuery, _ := Utils.JSONParse(query)
@@ -58,4 +39,44 @@ func (s *Search) GetQuery(c echo.Context) JSON {
 		}
 		return formattedQuery
 	}
+}
+
+// Format query filter parameters with MongoDB pattern
+func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
+    reflectQuery := reflect.ValueOf(query)
+
+    formattedQuery := JSONObject{}
+    for _, k := range reflectQuery.MapKeys() {
+        key := k.String()
+
+        switch key {
+        case "filter":
+            formattedQuery[key] = s.FormatFilters(reflectQuery.MapIndex(k).Interface(), rule)
+        case "result":
+            formattedQuery[key] = reflectQuery.MapIndex(k).Interface()
+        }
+    }
+    return formattedQuery
+}
+
+// Run MongoDB search and result filtering
+func Run(search JSONObject, collection *bongo.Collection) []interface{} {
+    var records []interface{}
+    if search["filter"] != nil {
+        var model map[string]interface{}
+        results := collection.Find(search["filter"])
+        for results.Next(&model) {
+            filterResult(search["result"].([]string), &model)
+            records = append(records, model)
+        }
+        defer collection.Connection.Session.Close()
+    }
+    return records
+}
+
+// Filter result fields
+func filterResult(filter []string, model *map[string]interface{}) {
+    for _,key := range filter {
+        delete(*model, key)
+    }
 }
