@@ -60,8 +60,8 @@ func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
 }
 
 // Run MongoDB search and result filtering
-func (s *Search) Run(search JSONObject, collection *bongo.Collection) []interface{} {
-    var records []interface{}
+func (s *Search) RunQuery(search JSONObject, collection *bongo.Collection) []interface{} {
+    records := make([]interface{}, 0)
     if search["search"] != nil {
         var model map[string]interface{}
         results := collection.Find(search["search"])
@@ -78,16 +78,18 @@ func (s *Search) Run(search JSONObject, collection *bongo.Collection) []interfac
 func filterResult(search JSONObject, model *map[string]interface{}) {
     // Filter fields that not returns to result
     if search["filter"] != nil {
-        f, ok := search["filter"].([]string); if ok {
+        f, ok := search["filter"].([]interface{}); if ok {
             for _,key := range f {
-                delete(*model, key)
+                s, ok := key.(string); if ok {
+                    delete(*model, s)
+                }
             }
         }
     }
 
     // Get all results
     if search["result"] != nil {
-        f, ok := search["result"].([]string); if ok {
+        f, ok := search["result"].([]interface{}); if ok {
             for key := range *model {
                 if Utils.ArrayContains(f, key) == false {
                     delete(*model, key)
