@@ -37,10 +37,12 @@ func formatErrors(errs interface{}) interface{} {
     errors := []interface{}{}
     if errs == nil { return errors }
 
-    if Utils.In(reflect.ValueOf(errs).Kind(), reflect.Array, reflect.Slice) == false {
-        errors = []interface{}{errs}
+    if Utils.In(reflect.ValueOf(errs).Kind(), reflect.Array, reflect.Slice) {
+        s := reflect.ValueOf(errs); for i:=0; i<s.Len(); i++ {
+            errors = append(errors, s.Index(i).Interface())
+        }
     } else {
-        errors = errs.([]interface{})
+        errors = []interface{}{errs}
     }
 
     for key,value := range errors {
