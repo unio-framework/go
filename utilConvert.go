@@ -1,6 +1,7 @@
 package unio
 
 import (
+    "encoding/json"
     "errors"
     "github.com/labstack/gommon/log"
     "strconv"
@@ -40,4 +41,15 @@ func (u *Util) TimeConvert(value interface{}, from string, to string) (result st
         log.Error(err)
     }
     return "", err
+}
+
+// Convert struct to string key map
+func (u *Util) StructToMap(data interface{}) (map[string]interface{}, error) {
+    result := make(map[string]interface{})
+
+    b, err := json.Marshal(data)
+    if err != nil { return nil, err }
+
+    err = json.Unmarshal(b, &result)
+    return result, err
 }
