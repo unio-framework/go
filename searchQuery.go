@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/gommon/log"
 	"net/url"
 	"reflect"
+    "strings"
 )
 
 // Format $_GET string query to JSON structure
@@ -63,7 +64,12 @@ func (s *Search) SearchFormatWithRule(query JSON, rule RequestFormatRule) JSONOb
         case "search":
             formattedQuery[key] = s.FormatFilters(reflectQuery.MapIndex(k).Interface(), rule)
         case "filter", "result", "populate":
-            formattedQuery[key] = reflectQuery.MapIndex(k).Interface()
+            data := reflectQuery.MapIndex(k).Interface()
+            plain, ok := data.(string); if ok {
+                formattedQuery[key] = strings.Split(plain, ",")
+            } else {
+                formattedQuery[key] = data
+            }
         }
     }
     return formattedQuery
