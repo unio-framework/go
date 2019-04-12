@@ -20,3 +20,8 @@ var Searchs = Search{}
 Rule structure
 */
 type RequestFormatRule func(method string, key string, value interface{}) interface{}
+
+/**
+Populate structure
+*/
+type SearchPopulate func(field string, value interface{}) (interface{}, error)

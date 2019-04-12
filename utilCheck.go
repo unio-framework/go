@@ -27,3 +27,9 @@ func (u *Util) In(data interface{}, compares ...interface{}) bool {
     }
     return false
 }
+
+// Check if map key exists
+func (u *Util) MapKeyExists(data map[string]interface{}, key string) bool {
+    _, ok := data[key]
+    return ok
+}
