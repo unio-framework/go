@@ -4,6 +4,7 @@
 ### Added
 - Added echo's error response format middleware
 - Added populate settings to search flow
+- Added interface to ObjectId conversion
 
 ## [0.1.1] - 2019-03-28
 ### Added
