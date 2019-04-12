@@ -13,6 +13,11 @@ import (
 )
 
 // Format $_GET string query to JSON structure
+// Uses bellow pattern:
+// - search: MongoDB custom formatted query
+// - filter: List of fields to remove from response
+// - result: List of fields to return from response
+// - populate: List of fields can be populated
 func (s *Search) GetQuery(c echo.Context) JSON {
 	rawQuery := c.QueryString()
 	query, err := url.PathUnescape(rawQuery)
@@ -105,9 +110,9 @@ func populateFields(search JSONObject, model map[string]interface{}, populate Se
     if search["populate"] != nil && populate != nil {
         f, ok := search["populate"].([]interface{}); if ok {
             for _,k := range f {
-                key, ok := k.(string); if ok && Utils.MapKeyExists(model, key) {
+                key, ok := k.(string); if ok && Utils.MapKeyExists(model, key) && model[key] != nil {
                     result, err := populate(key, model[key])
-                    if err != nil { model[key] = result }
+                    if err == nil && result != nil { model[key] = result }
                 }
             }
         }
