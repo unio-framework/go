@@ -47,7 +47,12 @@ func (s *Search) GetQuery(c echo.Context) JSON {
 }
 
 // Format query filter parameters with MongoDB pattern
-func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
+func (s *Search) SearchFormat(query JSON) JSONObject {
+    return s.SearchFormatWithRule(query, nil)
+}
+
+// Format query filter parameters with MongoDB pattern and rule
+func (s *Search) SearchFormatWithRule(query JSON, rule RequestFormatRule) JSONObject {
     reflectQuery := reflect.ValueOf(query)
 
     formattedQuery := JSONObject{}
@@ -65,7 +70,12 @@ func (s *Search) SearchFormat(query JSON, rule RequestFormatRule) JSONObject {
 }
 
 // Run MongoDB search and result filtering
-func (s *Search) RunQuery(collection *bongo.Collection, search JSONObject, populate SearchPopulate) []interface{} {
+func (s *Search) RunQuery(collection *bongo.Collection, search JSONObject) []interface{} {
+    return s.RunQueryWithPopulate(collection, search, nil)
+}
+
+// Run MongoDB search, result filtering and populate
+func (s *Search) RunQueryWithPopulate(collection *bongo.Collection, search JSONObject, populate SearchPopulate) []interface{} {
     records := make([]interface{}, 0)
     if search["search"] != nil {
         var model map[string]interface{}
