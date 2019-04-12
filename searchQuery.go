@@ -93,8 +93,8 @@ func (s *Search) RunQueryWithPopulate(collection *bongo.Collection, search JSONO
         var model map[string]interface{}
         results := collection.Find(search["search"])
         for results.Next(&model) {
-            filterResult(search, &model)
-            populateFields(search, model, populate)
+            s.FilterResult(search, &model)
+            s.PopulateFields(search, model, populate)
             records = append(records, model)
         }
         defer collection.Connection.Session.Close()
@@ -103,7 +103,7 @@ func (s *Search) RunQueryWithPopulate(collection *bongo.Collection, search JSONO
 }
 
 // Filter result fields
-func filterResult(search JSONObject, model *map[string]interface{}) {
+func (s *Search) FilterResult(search JSONObject, model *map[string]interface{}) {
     // Filter fields that not returns to result
     if search["filter"] != nil {
         f, ok := search["filter"].([]interface{}); if ok {
@@ -128,7 +128,7 @@ func filterResult(search JSONObject, model *map[string]interface{}) {
 }
 
 // Populate result fields
-func populateFields(search JSONObject, model map[string]interface{}, populate SearchPopulate) {
+func (s *Search) PopulateFields(search JSONObject, model map[string]interface{}, populate SearchPopulate) {
     if search["populate"] != nil && populate != nil {
         f, ok := search["populate"].([]interface{}); if ok {
             for _,k := range f {
