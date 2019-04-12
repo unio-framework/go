@@ -41,7 +41,7 @@ func (s *Search) GetQuery(c echo.Context) JSON {
 
 		formattedQuery := JSONObject{}
 		for key, value := range urlQuery {
-            if Utils.IsJSON(value[0]) {
+            if Utils.IsJSON(value[0]) || key == "search" {
                 formattedQuery[key], _ = Utils.JSONParse(value[0])
             } else if Utils.In(key, "filter", "result", "populate") {
                 var data []interface{}
