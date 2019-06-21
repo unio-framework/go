@@ -3,6 +3,7 @@ package unio
 import (
 	"github.com/labstack/echo"
 	"reflect"
+    "strings"
 )
 
 /**
@@ -12,7 +13,9 @@ Run all JSON body fields, and format the need
 func (m *Middleware) JsonFormatFields(formatter RequestFormatRule) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
-			if c.Request().Header.Get(echo.HeaderContentType) != echo.MIMEApplicationJSON {
+		    mimeType := c.Request().Header.Get(echo.HeaderContentType)
+		    // Use contains to make more accurate
+			if !strings.Contains(mimeType, echo.MIMEApplicationJSON) {
 				// Conversion will be done only for JSON request
 				return next(c)
 			}
